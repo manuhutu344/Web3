@@ -12,7 +12,7 @@ contract RealEstate {
         string images;
         string propertyAddress;
         string description;
-        address[] reviweers;
+        address[] reviewers;
         string[] reviews;
     }
 
@@ -144,7 +144,12 @@ contract RealEstate {
         return items;
     }
 
-    function addReview () external{}
+    function addReview (uint256 productId, uint256 rating, string calldata comment, address user) external{
+        require(rating >= 1 && rating <= 5, 'rating harus 1 dan 5');
+        Property storage property = properties[productId];
+        property.reviewers.push(user);
+        property.reviews.push(comment);
+    }
 
     function getProductReviews () external view returns(Review[] memory){}
 
