@@ -159,9 +159,25 @@ contract RealEstate {
         reviewsCounter++;
     }
 
-    function getProductReviews (uint256 productId) external view returns(Review[] memory){}
+    function getProductReviews (uint256 productId) external view returns(Review[] memory){
+        return reviews[productId];
+    }
 
-    function getUserReviews () external view returns(Review[] memory){}
+    function getUserReviews (address user) external view returns(Review[] memory){
+        uint256 totalReviews = userReviews[user].length;
+        Review[] memory userProductReviews = new Review[](totalReviews);
+        for(uint256 i = 0; i < userReviews[user].length; i++){
+            uint256 productId = userReviews[user][i];
+            Review[] memory productReviews = reviews[productId];
+
+            for(uint256 j = 0; j < productReviews.length; j++){
+                if(productReviews[j].reviewer == user){
+                    userProductReviews[i] = productReviews[j];
+                }
+            }
+        }
+        return userProductReviews;
+    }
 
     function likeReview () external{}
 
