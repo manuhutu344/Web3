@@ -38,7 +38,7 @@ contract RealEstate {
     }
 
     mapping(uint256 => Review[]) private reviews;
-    mapping(address => uint256) private userReviews;
+    mapping(address => uint256[]) private userReviews;
     mapping(uint256 => Product) private products;
 
     uint256 public reviewsCounter;
@@ -149,9 +149,17 @@ contract RealEstate {
         Property storage property = properties[productId];
         property.reviewers.push(user);
         property.reviews.push(comment);
+
+        reviews[productId].push(Review(user, productId, rating, comment, 0));
+        userReviews[user].push(productId);
+        products[productId].totalRating += rating;
+        products[productId].numReviews++;
+
+        emit ReviewAdded(productId, user, rating, comment);
+        reviewsCounter++;
     }
 
-    function getProductReviews () external view returns(Review[] memory){}
+    function getProductReviews (uint256 productId) external view returns(Review[] memory){}
 
     function getUserReviews () external view returns(Review[] memory){}
 
