@@ -185,5 +185,19 @@ contract RealEstate {
         emit ReviewLiked(productId, reviewIndex, user, review.likes);
     }
 
-    function getHighestratedProduct() external view returns (uint256){}
+    function getHighestratedProduct() external view returns (uint256){
+        uint256 highestRating = 0;
+        uint256 highestRatedProductId = 0;
+        for(uint256 i = 0; i < reviewsCounter; i++){
+            uint256 productId = i + 1;
+            if(products[productId].numReviews > 0){
+                uint256 avgRating = products[productId].totalRating / products[productId].numReviews;
+                if(avgRating > highestRating){
+                    highestRating = avgRating;
+                    highestRatedProductId = productId;
+                }
+            }
+        }
+        return highestRatedProductId;
+    }
 }
