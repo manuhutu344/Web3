@@ -179,7 +179,11 @@ contract RealEstate {
         return userProductReviews;
     }
 
-    function likeReview () external{}
+    function likeReview (uint256 productId, uint256 reviewIndex, address user) external{
+        Review storage review = reviews[productId][reviewIndex];
+        review.likes++;
+        emit ReviewLiked(productId, reviewIndex, user, review.likes);
+    }
 
     function getHighestratedProduct() external view returns (uint256){}
 }
